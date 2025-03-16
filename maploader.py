@@ -1,7 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import math
-
+from tower import *
 
 
 class MapLoader:
@@ -84,7 +84,7 @@ class MapLoader:
         x = event.x // self.block_size
         y = event.y // self.block_size
 
-        print(event.x, event.y)
+        # print(event.x, event.y)
 
         if self.tower_lit == 0:
             print("Please select a Tower first!")
@@ -97,74 +97,49 @@ class MapLoader:
         if self.grid[y][x] in [10, 20, 30]:
             print("Tower already placed here!")
             return
-
-        self.grid[y][x] = self.tower_lit
+        
         
         img = ImageTk.PhotoImage(self.textures[self.tower_lit])
-        self.towers.append(img)
+        # super().__init__(radius, canvas, x, y, target, damage=damage, speed=speed)
+        tower = None
+
+
+        # for monter_type in self.tower_lit:
+        if self.tower_lit == 10:
+            tower = Tower1(
+                x=event.x,
+                y=event.y,
+                canvas=self.canvas
+            )
+
+        elif self.tower_lit == 20:
+            tower = Tower2(
+                x=event.x,
+                y=event.y,
+                canvas=self.canvas
+            )
+
+        elif self.tower_lit == 30:
+                tower = Tower3(
+                x=event.x,
+                y=event.y,
+                canvas=self.canvas
+            )
+
+
+
+        # if self.
+        self.towers.append({
+            "tower": tower,
+            "tower_img": img,
+        })
+
+
+
         self.canvas.create_image(x * self.block_size, y * self.block_size, image=img, anchor=tk.NW)
 
+    def get_tower_list_on_map(self):
+        return self.towers
     
 
-
-
-class Monster:
-    def __init__(self, canvas, path_list, image_path, speed, block_size=20, hp=00):
-        self.canvas = canvas
-        self.path_list = path_list
-        self.current_step = 0
-        self.block_size = block_size
-        self.speed = speed
-        self.hp = hp
-
-        self.x, self.y = self.path_list[0] if self.path_list else (0, 0)
-
-        self.image = Image.open(image_path).resize((self.block_size, self.block_size))
-        self.image_tk = ImageTk.PhotoImage(self.image)
-
-        # self.monster_obj = self.canvas.create_image(self.x * self.block_size, self.y * self.block_size, image=self.image_tk, anchor=tk.NW)
-        self.monster_obj = self.canvas.create_image(self.x * self.block_size, self.y * self.block_size, image=self.image_tk, anchor=tk.NW)
-        self.canvas.addtag_withtag('monster', self.monster_obj)
-
-
-    def move(self):
-            if self.current_step < len(self.path_list) - 1:
-                target_x, target_y = self.path_list[self.current_step + 1]
-                
-                dx = (target_x - self.x) * self.block_size
-                dy = (target_y - self.y) * self.block_size
-
-                # อัปเดตตำแหน่ง
-                self.canvas.move(self.monster_obj, dx, dy)
-
-                # อัปเดตค่าพิกัดใหม่
-                self.x, self.y = target_x, target_y
-                self.current_step += 1
-
-                # เคลื่อนที่ต่อไปหลังจากเวลาที่กำหนด
-                self.canvas.after(self.speed, self.move)
-
-
-
-class Monster1(Monster): 
-    def __init__(self, canvas, path_list, block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/Monster1.png", speed=300, block_size=block_size, hp=50)
-
-
-class Monster2(Monster):
-    def __init__(self, canvas, path_list, block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/Monster2.png", speed=200, block_size=block_size, hp=150)
-
-class Monster3(Monster):
-    def __init__(self, canvas, path_list,block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/MonsterBig.png", speed=100, block_size=block_size, hp=300)
-        
-class Tower:
-    def __init__(self, radius, canvas, x, y):
-        self.canvas = canvas
-        self.x = x
-        self.y = y  
-        self.radius = radius
-
-
-        
+    

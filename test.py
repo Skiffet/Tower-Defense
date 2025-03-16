@@ -1,6 +1,6 @@
 import tkinter as tk
 import random
-from tawer_defense import MapLoader, Monster1, Monster2, Monster3, Tower
+from maploader import MapLoader, Monster1, Monster2, Monster3, Tower
 
 class Game:
     def __init__(self, txt_path="first_map.txt"):

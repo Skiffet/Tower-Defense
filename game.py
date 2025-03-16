@@ -1,7 +1,11 @@
 import tkinter as tk
 import random
-from tawer_defense import MapLoader, Monster1, Monster2, Monster3, Tower
+from maploader import MapLoader
+from tower import Tower1, Tower
 from PIL import Image, ImageTk
+from monster import Monster1, Monster2, Monster3, Monster
+import time
+
 
 class Game:
     def __init__(self, txt_path="first_map.txt"):
@@ -25,15 +29,15 @@ class Game:
         self.spawn_multiplier = 1
         self.spawn_initial_monsters()
 
+        self.root.after(5, self.run_tower)
         self.root.mainloop()
-        
 
     def spawn_monster_delayed(self, monster_class, delay):
         """ สร้างมอนสเตอร์โดยมีการหน่วงเวลาตาม delay (มิลลิวินาที) """
         self.root.after(delay, lambda: self.spawn_monster(monster_class))
 
-
     def spawn_monster(self, monster_class):
+        print("Monster created")
         """ สร้างมอนสเตอร์ 1 ตัว และให้มันเคลื่อนที่ """
         monster = monster_class(self.map_loader.canvas, self.map_loader.path_list)
         self.monsters.append(monster)
@@ -42,28 +46,28 @@ class Game:
     def spawn_initial_monsters(self):
         """ เริ่มต้นเกมโดยให้ Monster1 เกิดทีละตัว พร้อม delay """
         spawn_delay = 500  # เวลาห่างกัน 500 มิลลิวินาที (0.5 วินาที)
-        for i in range(4):  # สร้าง Monster1 ทีละตัว
+        for i in range(2):  # สร้าง Monster1 ทีละตัว
             self.spawn_monster_delayed(Monster1, i * spawn_delay)
 
         # ตั้งเวลาให้ Monster1 และ Monster2 เกิดหลัง 6 วิ
-        self.root.after(7000, lambda: self.spawn_monster(Monster1))
-        self.root.after(7000, lambda: self.spawn_monster(Monster2))
+        # self.root.after(7000, lambda: self.spawn_monster(Monster1))
+        # self.root.after(7000, lambda: self.spawn_monster(Monster2))
 
-        # ตั้งเวลาให้ Monster1, Monster2 เกิดหลัง 10 วิ
-        self.root.after(10000, lambda: self.spawn_monster(Monster1))
-        self.root.after(10000, lambda: self.spawn_monster(Monster2))
+        # # ตั้งเวลาให้ Monster1, Monster2 เกิดหลัง 10 วิ
+        # self.root.after(10000, lambda: self.spawn_monster(Monster1))
+        # self.root.after(10000, lambda: self.spawn_monster(Monster2))
 
         # print("เริ่มตั้งค่าให้เกิดการสุ่มมอนสเตอร์หลังจาก 15 วิ")
-        self.root.after(17000, self.random_spawn)
+        # self.root.after(5000, self.random_spawn)
 
     def random_spawn(self):
         """ สุ่มเกิดมอนสเตอร์ และจำนวนเพิ่มขึ้น 2 เท่าทุก 5 วินาที """
 
-        if self.spawn_multiplier == 0:
-            self.spawn_multiplier = 1
-        else:
-            self.spawn_multiplier *= 2
-
+        # if self.spawn_multiplier == 0:
+        #     self.spawn_multiplier = 1
+        # else:
+        #     self.spawn_multiplier *= 2
+        self.spawn_multiplier = 1
         count = int(self.spawn_multiplier) 
         monster_types = [Monster1, Monster2, Monster3] 
 
@@ -111,6 +115,31 @@ class Game:
         self.selected_tower = id
         self.map_loader.set_towerId(id)
 
+
+    def run_tower(self):
+        dead_monsters = []
+        for tower in self.map_loader.get_tower_list_on_map():
+            tower_obj: Tower = tower["tower"]
+            nearest_monster = tower_obj.find_target(self.monsters)
+            if nearest_monster:
+                new_hp  = tower_obj.shoot(nearest_monster)
+                print(f"near {new_hp}")
+
+                # print(f"Monster at {nearest_monster.x}, {nearest_monster.y}) is dead and will be removed.")
+                if new_hp <= 0:
+                    dead_monsters.append(nearest_monster) 
+
+        for monster in dead_monsters:
+            if monster in self.monsters:
+                self.monsters.remove(monster)
+                self.map_loader.canvas.delete(monster.monster_obj)
+
+        self.root.after(500, self.run_tower)
+
+
+    def check_alive(self):
+        print(f"long long {Tower.shoot}")
+        
     
 
 # เริ่มเกม
