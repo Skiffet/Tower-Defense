@@ -40,12 +40,14 @@ class Tower:
         monster.hp -= self.damage
         print("after", monster.hp)
         return monster.hp
+    
+        
 
 
 
 class Tower1(Tower):
     def __init__(self, x, y, canvas):
-        super().__init__(radius=30, x=x, y=y, canvas=canvas, damage=50, speed=15)
+        super().__init__(radius=50, x=x, y=y, canvas=canvas, damage=50, speed=30)
 
 class Tower2(Tower):
     def __init__(self, x, y, canvas):

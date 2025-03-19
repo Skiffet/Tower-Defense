@@ -43,6 +43,10 @@ class Monster:
             # เคลื่อนที่ต่อไปหลังจากเวลาที่กำหนด
             self.canvas.after(self.speed, self.move)
 
+    def calculate(self):
+        # self.amount += self.amount 
+        # self.score += self.score
+        return self.amount, self.score
 
 
 class Monster1(Monster): 
