@@ -51,7 +51,7 @@ class Monster:
 
 class Monster1(Monster): 
     def __init__(self, canvas, path_list, block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/Monster1.png", speed=300, block_size=block_size, hp=50, amount=15, score = 10)
+        super().__init__(canvas, path_list, "./mosterImage/Monster1.png", speed=300, block_size=block_size, hp=50, amount=100, score = 10)
 
 
 class Monster2(Monster):

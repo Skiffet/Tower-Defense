@@ -8,9 +8,11 @@ import time
 
 
 class Game:
-    money = 100
-    score = 0
+    # money = 100
+    # score = 0
     def __init__(self, txt_path="first_map.txt"):
+        self.money = 100
+        self.score = 0
         self.root = tk.Tk()
         self.root.title("Tower Defense Game")
 
@@ -22,7 +24,7 @@ class Game:
         self.map_frame = tk.Frame(self.main_frame, width=600)
         self.map_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        self.map_loader = MapLoader(self.map_frame, txt_path)
+        self.map_loader = MapLoader(self.map_frame, txt_path, game=self)
         self.map_loader.canvas.pack(fill=tk.BOTH, expand=True) 
 
         self.create_tower_panel()
@@ -82,8 +84,8 @@ class Game:
     def create_tower_panel(self):
 
         # self.money = 1000
-        self.money_label = tk.Label(self.main_frame, text=f"Money: ${Game.money}", font=("Arial", 14))
-        self.score_label = tk.Label(self.main_frame,text=f"Score: {Game.score}", font=("Arial", 14))
+        self.money_label = tk.Label(self.main_frame, text=f"Money: ${self.money}", font=("Arial", 14))
+        self.score_label = tk.Label(self.main_frame,text=f"Score: {self.score}", font=("Arial", 14))
         self.money_label.pack(side=tk.TOP, fill=tk.X)
         self.score_label.pack(fill=tk.X)
 
@@ -114,25 +116,58 @@ class Game:
                             image=photo, compound="top", command=lambda t=data["id"]: self.select_tower(t))
             btn.pack(pady=5, fill=tk.X)
 
-    # def select_tower(self, id):
-    #     """ ✅ ฟังก์ชันเลือก Tower ที่ต้องการวาง """
-
-    #     self.selected_tower = id
-    #     self.map_loader.set_towerId(id)
-
     def select_tower(self, id):
         tower_data = next((data for data in self.towers.values() if data["id"] == id), None)
-    
         if tower_data is not None:
-            if Game.money >= tower_data["cost"]:
+            if self.money >= tower_data["cost"]:
                 self.selected_tower = id
                 self.map_loader.set_towerId(id)
-                Game.money -= tower_data["cost"]
-                self.money_label.config(text=f"Money: ${Game.money}")
+                self.money_label.config(text=f"Money: ${self.money}")
+
+    # def select_tower(self, id):
+    #     tower_data = next((data for data in self.towers.values() if data["id"] == id), None)
+    
+    #     if tower_data is not None:
+    #         if Game.money >= tower_data["cost"]:
+    #             self.selected_tower = id
+    #             self.map_loader.set_towerId(id)
+    #             self.money_label.config(text=f"Money: ${Game.money}")
                 # print(f"Tower วางสำเร็จ, เงินที่เหลือ: {Game.money}")
             # else:
                 # print("เงินไม่พอสำหรับวาง Tower นี้!")
 
+
+    # def run_tower(self):
+    #     dead_monsters = []
+    #     for tower in self.map_loader.get_tower_list_on_map():
+    #         tower_obj: Tower = tower["tower"]
+    #         nearest_monster = tower_obj.find_target(self.monsters)
+    #         if nearest_monster:
+    #             new_hp  = tower_obj.shoot(nearest_monster)
+    #             # print(f"near {new_hp}")
+
+    #             # print(f"Monster at {nearest_monster.x}, {nearest_monster.y}) is dead and will be removed.")
+    #             if new_hp <= 0:
+    #                 dead_monsters.append(nearest_monster)  
+                    
+    #                 # ดึงค่าจากฟังก์ชัน calculate()
+    #                 money, score = nearest_monster.calculate()
+                    
+    #                 # อัปเดตค่าเงินและคะแนนในเกม
+    #                 Game.money += money
+    #                 Game.score += score
+
+    #     for monster in dead_monsters:
+    #         if monster in self.monsters:
+    #             self.monsters.remove(monster)
+    #             self.map_loader.canvas.delete(monster.monster_obj)
+                
+    #             # อัปเดต UI ให้แสดงค่าเงินและคะแนนใหม่
+    #             self.money_label.config(text=f"Money: ${Game.money}")
+    #             self.score_label.config(text=f"Score {Game.score}")
+    #             # print(f"เงินปัจจุบัน: {Game.money}, คะแนน: {Game.score}")
+
+    #     self.root.after(500, self.run_tower)
 
     def run_tower(self):
         dead_monsters = []
@@ -141,28 +176,18 @@ class Game:
             nearest_monster = tower_obj.find_target(self.monsters)
             if nearest_monster:
                 new_hp  = tower_obj.shoot(nearest_monster)
-                # print(f"near {new_hp}")
-
-                # print(f"Monster at {nearest_monster.x}, {nearest_monster.y}) is dead and will be removed.")
                 if new_hp <= 0:
-                    dead_monsters.append(nearest_monster)  
-                    
-                    # ดึงค่าจากฟังก์ชัน calculate()
+                    dead_monsters.append(nearest_monster)
                     money, score = nearest_monster.calculate()
-                    
-                    # อัปเดตค่าเงินและคะแนนในเกม
-                    Game.money += money
-                    Game.score += score
+                    self.money += money
+                    self.score += score
 
         for monster in dead_monsters:
             if monster in self.monsters:
                 self.monsters.remove(monster)
                 self.map_loader.canvas.delete(monster.monster_obj)
-                
-                # อัปเดต UI ให้แสดงค่าเงินและคะแนนใหม่
-                self.money_label.config(text=f"Money: ${Game.money}")
-                self.score_label.config(text=f"Score {Game.score}")
-                # print(f"เงินปัจจุบัน: {Game.money}, คะแนน: {Game.score}")
+                self.money_label.config(text=f"Money: ${self.money}")
+                self.score_label.config(text=f"Score: {self.score}")
 
         self.root.after(500, self.run_tower)
 
