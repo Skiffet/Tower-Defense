@@ -41,6 +41,9 @@ class Tower:
         print("after", monster.hp)
         return monster.hp
     
+    def get_damage(self):
+        return self.damage
+    
         
 
 
@@ -51,7 +54,7 @@ class Tower1(Tower):
 
 class Tower2(Tower):
     def __init__(self, x, y, canvas):
-        super().__init__(radius=60, x=x, y=y, canvas=canvas, damage=30,  speed=15)
+        super().__init__(radius=80, x=x, y=y, canvas=canvas, damage=30,  speed=15)
 
     
 class Tower3(Tower):

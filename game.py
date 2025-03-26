@@ -5,18 +5,24 @@ from tower import Tower1, Tower
 from PIL import Image, ImageTk
 from monster import Monster1, Monster2, Monster3, Monster
 import time
-
+import csv
+import os
 
 class Game:
     # money = 100
     # score = 0
-    def __init__(self, txt_path="first_map.txt"):
+    def __init__(self, root, txt_path="first_map.txt"):
+        self.start_time = time.time()
+        self.total_monster_killed = 0
+        self.total_tower_placed = 0
+        self.total_damege = 0
+
         self.money = 100
         self.score = 0
-        self.root = tk.Tk()
-        self.root.title("Tower Defense Game")
+        self.root = root
+        # self.root.title("Tower Defense Game")
 
-        self.root.geometry("800x600")
+        # self.root.geometry("800x600")
 
         self.main_frame = tk.Frame(self.root)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
@@ -54,23 +60,23 @@ class Game:
             self.spawn_monster_delayed(Monster1, i * spawn_delay)
 
         # ตั้งเวลาให้ Monster1 และ Monster2 เกิดหลัง 6 วิ
-        # self.root.after(7000, lambda: self.spawn_monster(Monster1))
-        # self.root.after(7000, lambda: self.spawn_monster(Monster2))
+        self.root.after(7000, lambda: self.spawn_monster(Monster1))
+        self.root.after(7000, lambda: self.spawn_monster(Monster2))
 
-        # # ตั้งเวลาให้ Monster1, Monster2 เกิดหลัง 10 วิ
-        # self.root.after(10000, lambda: self.spawn_monster(Monster1))
-        # self.root.after(10000, lambda: self.spawn_monster(Monster2))
+        # ตั้งเวลาให้ Monster1, Monster2 เกิดหลัง 10 วิ
+        self.root.after(10000, lambda: self.spawn_monster(Monster1))
+        self.root.after(10000, lambda: self.spawn_monster(Monster2))
 
-        # print("เริ่มตั้งค่าให้เกิดการสุ่มมอนสเตอร์หลังจาก 15 วิ")
-        # self.root.after(5000, self.random_spawn)
+        print("เริ่มตั้งค่าให้เกิดการสุ่มมอนสเตอร์หลังจาก 15 วิ")
+        self.root.after(5000, self.random_spawn)
 
     def random_spawn(self):
         """ สุ่มเกิดมอนสเตอร์ และจำนวนเพิ่มขึ้น 2 เท่าทุก 5 วินาที """
 
-        # if self.spawn_multiplier == 0:
-        #     self.spawn_multiplier = 1
-        # else:
-        #     self.spawn_multiplier *= 2
+        if self.spawn_multiplier == 0:
+            self.spawn_multiplier = 1
+        else:
+            self.spawn_multiplier *= 2
         self.spawn_multiplier = 1
         count = int(self.spawn_multiplier) 
         monster_types = [Monster1, Monster2, Monster3] 
@@ -120,54 +126,11 @@ class Game:
         tower_data = next((data for data in self.towers.values() if data["id"] == id), None)
         if tower_data is not None:
             if self.money >= tower_data["cost"]:
+                self.total_tower_placed += 1
                 self.selected_tower = id
                 self.map_loader.set_towerId(id)
                 self.money_label.config(text=f"Money: ${self.money}")
 
-    # def select_tower(self, id):
-    #     tower_data = next((data for data in self.towers.values() if data["id"] == id), None)
-    
-    #     if tower_data is not None:
-    #         if Game.money >= tower_data["cost"]:
-    #             self.selected_tower = id
-    #             self.map_loader.set_towerId(id)
-    #             self.money_label.config(text=f"Money: ${Game.money}")
-                # print(f"Tower วางสำเร็จ, เงินที่เหลือ: {Game.money}")
-            # else:
-                # print("เงินไม่พอสำหรับวาง Tower นี้!")
-
-
-    # def run_tower(self):
-    #     dead_monsters = []
-    #     for tower in self.map_loader.get_tower_list_on_map():
-    #         tower_obj: Tower = tower["tower"]
-    #         nearest_monster = tower_obj.find_target(self.monsters)
-    #         if nearest_monster:
-    #             new_hp  = tower_obj.shoot(nearest_monster)
-    #             # print(f"near {new_hp}")
-
-    #             # print(f"Monster at {nearest_monster.x}, {nearest_monster.y}) is dead and will be removed.")
-    #             if new_hp <= 0:
-    #                 dead_monsters.append(nearest_monster)  
-                    
-    #                 # ดึงค่าจากฟังก์ชัน calculate()
-    #                 money, score = nearest_monster.calculate()
-                    
-    #                 # อัปเดตค่าเงินและคะแนนในเกม
-    #                 Game.money += money
-    #                 Game.score += score
-
-    #     for monster in dead_monsters:
-    #         if monster in self.monsters:
-    #             self.monsters.remove(monster)
-    #             self.map_loader.canvas.delete(monster.monster_obj)
-                
-    #             # อัปเดต UI ให้แสดงค่าเงินและคะแนนใหม่
-    #             self.money_label.config(text=f"Money: ${Game.money}")
-    #             self.score_label.config(text=f"Score {Game.score}")
-    #             # print(f"เงินปัจจุบัน: {Game.money}, คะแนน: {Game.score}")
-
-    #     self.root.after(500, self.run_tower)
 
     def run_tower(self):
         dead_monsters = []
@@ -177,6 +140,10 @@ class Game:
             if nearest_monster:
                 new_hp  = tower_obj.shoot(nearest_monster)
                 if new_hp <= 0:
+                    
+                    self.total_monster_killed += 1
+                    self.total_damege += tower_obj.get_damage()
+
                     dead_monsters.append(nearest_monster)
                     money, score = nearest_monster.calculate()
                     self.money += money
@@ -188,6 +155,12 @@ class Game:
                 self.map_loader.canvas.delete(monster.monster_obj)
                 self.money_label.config(text=f"Money: ${self.money}")
                 self.score_label.config(text=f"Score: {self.score}")
+        
+            # เช็คว่า Monster ถึงจุดสุดท้ายหรือยัง
+        for monster in self.monsters:
+            if monster.current_step >= len(monster.path_list) - 1:
+                self.game_over()
+                return
 
         self.root.after(500, self.run_tower)
 
@@ -196,9 +169,45 @@ class Game:
         print(f"long long {Tower.shoot}")
 
     
-    # def total(self):
-        
-    
+     
+    def game_over(self):
+        play_time = time.time() - self.start_time
+        minutes = int(play_time // 60)
+        seconds = int(play_time % 60)
 
-# เริ่มเกม
-Game("first_map.txt")
+        self.history()
+
+        msg = f"You Lost!\nScore: {self.score}\nTime: {minutes}m {seconds}s"
+
+        import tkinter.messagebox as msgbox
+        msgbox.showinfo("Game Over กากมาก", msg)
+
+        # ปิดเกม (หรือจะให้ restart ก็ได้)
+        self.root.destroy()
+
+    
+    def history(self):
+        play_time = time.time() - self.start_time
+        # minutes = int(play_time // 60)
+        seconds = int(play_time % 60)
+        print("History")
+        print(f"Total Monster Killed: {self.total_monster_killed}")
+        print(f"Total Tower Placed: {self.total_tower_placed}")
+        print(f"Total Damage: {self.total_damege}")
+        print(f"Total Score: {self.score}")
+        print(f"Total Time: {seconds}")
+
+
+        file_empty = not os.path.exists("history.csv") or os.stat("history.csv").st_size == 0
+        with open("history.csv", mode="a", newline='') as file:
+            writer = csv.writer(file)
+            if file_empty:
+                writer.writerow(["Time", "Monsters Killed", "Towers Placed", "Damage", "Score"])  # ✅ เขียน header ถ้าว่าง
+            writer.writerow([
+                seconds,
+                self.total_monster_killed,
+                self.total_tower_placed,
+                self.total_damege,
+                self.score
+            ]) 
+
