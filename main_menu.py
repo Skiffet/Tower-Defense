@@ -8,7 +8,6 @@ root.title("Tower Defense - Main Menu")
 root.geometry("800x600")
 root.resizable(False, False)
 
-# โหลดพื้นหลัง
 bg_image = Image.open("bg.jpg").resize((800, 600))
 bg_photo = ImageTk.PhotoImage(bg_image)
 
@@ -16,16 +15,13 @@ canvas = tk.Canvas(root, width=800, height=600, highlightthickness=0)
 canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=bg_photo, anchor="nw")
 
-# ชื่อเกม
 canvas.create_text(400, 80, text="Tower Defense", font=("Arial", 36, "bold"), fill="white")
 canvas.create_text(400, 150, text="เลือกแผนที่:", font=("Arial", 16), fill="white")
 
-# รายชื่อแมพ
 map_options = ["first_map.txt", "second_map.txt"]
 map_var = tk.StringVar()
 map_var.set(map_options[0])
 
-# สร้าง style สำหรับ ttk.OptionMenu
 style = ttk.Style()
 style.theme_use("default")
 style.configure(

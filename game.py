@@ -14,16 +14,14 @@ class Game:
     def __init__(self, root, txt_path="first_map.txt"):
         self.start_time = time.time()
         self.total_monster_killed = 0
-        self.total_tower_placed = 0
+        self.total_tower_1_placed = 0
+        self.total_tower_2_placed = 0
+        self.total_tower_3_placed = 0
         self.total_damege = 0
 
         self.money = 100
         self.score = 0
         self.root = root
-        # self.root.title("Tower Defense Game")
-
-        # self.root.geometry("800x600")
-
         self.main_frame = tk.Frame(self.root)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
 
@@ -68,7 +66,7 @@ class Game:
         self.root.after(10000, lambda: self.spawn_monster(Monster2))
 
         print("เริ่มตั้งค่าให้เกิดการสุ่มมอนสเตอร์หลังจาก 15 วิ")
-        self.root.after(5000, self.random_spawn)
+        self.root.after(15000, self.random_spawn)
 
     def random_spawn(self):
         """ สุ่มเกิดมอนสเตอร์ และจำนวนเพิ่มขึ้น 2 เท่าทุก 5 วินาที """
@@ -84,7 +82,7 @@ class Game:
         for _ in range(count):
             random_monster = random.choice(monster_types)
             self.spawn_monster(random_monster)
-        self.root.after(7000, self.random_spawn)
+        self.root.after(15000, self.random_spawn)
 
 
     def create_tower_panel(self):
@@ -122,15 +120,22 @@ class Game:
                             image=photo, compound="top", command=lambda t=data["id"]: self.select_tower(t))
             btn.pack(pady=5, fill=tk.X)
 
-    def select_tower(self, id):
-        tower_data = next((data for data in self.towers.values() if data["id"] == id), None)
-        if tower_data is not None:
-            if self.money >= tower_data["cost"]:
-                self.total_tower_placed += 1
-                self.selected_tower = id
-                self.map_loader.set_towerId(id)
-                self.money_label.config(text=f"Money: ${self.money}")
+    def select_tower(self, tower_id):
+        tower_data = next((data for data in self.towers.values() if data["id"] == tower_id), None)
+        if tower_data and self.money >= tower_data["cost"]:
+            self.selected_tower = tower_id
+            self.map_loader.set_towerId(tower_id)
+            self.money_label.config(text=f"Money: ${self.money}")
 
+            tower_type_map = {
+                10: 'total_tower_1_placed',
+                20: 'total_tower_2_placed',
+                30: 'total_tower_3_placed'
+            }
+
+            attr_name = tower_type_map.get(tower_id)
+            if attr_name:
+                setattr(self, attr_name, getattr(self, attr_name) + 1)
 
     def run_tower(self):
         dead_monsters = []
@@ -156,7 +161,7 @@ class Game:
                 self.money_label.config(text=f"Money: ${self.money}")
                 self.score_label.config(text=f"Score: {self.score}")
         
-            # เช็คว่า Monster ถึงจุดสุดท้ายหรือยัง
+            
         for monster in self.monsters:
             if monster.current_step >= len(monster.path_list) - 1:
                 self.game_over()
@@ -192,22 +197,26 @@ class Game:
         seconds = int(play_time % 60)
         print("History")
         print(f"Total Monster Killed: {self.total_monster_killed}")
-        print(f"Total Tower Placed: {self.total_tower_placed}")
         print(f"Total Damage: {self.total_damege}")
         print(f"Total Score: {self.score}")
         print(f"Total Time: {seconds}")
+        print(f"Tower1 Placed: {self.total_tower_1_placed}")
+        print(f"Tower2 Placed: {self.total_tower_2_placed}")
+        print(f"Tower3 Placed: {self.total_tower_3_placed}")
 
 
         file_empty = not os.path.exists("history.csv") or os.stat("history.csv").st_size == 0
         with open("history.csv", mode="a", newline='') as file:
             writer = csv.writer(file)
             if file_empty:
-                writer.writerow(["Time", "Monsters Killed", "Towers Placed", "Damage", "Score"])  # ✅ เขียน header ถ้าว่าง
+                writer.writerow(["Time", "Monsters Killed", "Damage", "Score", "Tower1", "Tower2", "Tower3"])
             writer.writerow([
                 seconds,
                 self.total_monster_killed,
-                self.total_tower_placed,
                 self.total_damege,
-                self.score
+                self.score,
+                self.total_tower_1_placed,
+                self.total_tower_2_placed,
+                self.total_tower_3_placed
             ]) 
 
