@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from game import Game
+from analyze import GameDataAnalysis
 
 root = tk.Tk()
 root.title("Tower Defense - Main Menu")
@@ -49,9 +50,10 @@ play_text = canvas.create_text(400, 275, text="Play", font=("Arial", 16), fill="
 canvas.tag_bind(play_rect, "<Button-1>", on_play_click)
 canvas.tag_bind(play_text, "<Button-1>", on_play_click)
 
-# ปุ่ม Analyse (ในอนาคต)
+
 def on_analyse_click(event=None):
-    print("ยังไม่ได้ทำหน้า analyse")
+    GameDataAnalysis(csv_path="history.csv")
+
 
 analyse_rect = canvas.create_rectangle(300, 320, 500, 370, fill="#222", outline="white", width=2)
 analyse_text = canvas.create_text(400, 345, text="Analyse", font=("Arial", 16), fill="white")
