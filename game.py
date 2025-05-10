@@ -9,8 +9,6 @@ import csv
 import os
 
 class Game:
-    # money = 100
-    # score = 0
     def __init__(self, root, txt_path="first_map.txt"):
         self.start_time = time.time()
         self.total_monster_killed = 0
@@ -41,48 +39,68 @@ class Game:
         self.root.mainloop()
 
     def spawn_monster_delayed(self, monster_class, delay):
-        """ สร้างมอนสเตอร์โดยมีการหน่วงเวลาตาม delay (มิลลิวินาที) """
         self.root.after(delay, lambda: self.spawn_monster(monster_class))
 
     def spawn_monster(self, monster_class):
-        print("Monster created")
-        """ สร้างมอนสเตอร์ 1 ตัว และให้มันเคลื่อนที่ """
         monster = monster_class(self.map_loader.canvas, self.map_loader.path_list)
         self.monsters.append(monster)
         monster.move()
 
     def spawn_initial_monsters(self):
-        """ เริ่มต้นเกมโดยให้ Monster1 เกิดทีละตัว พร้อม delay """
-        spawn_delay = 500  # เวลาห่างกัน 500 มิลลิวินาที (0.5 วินาที)
-        for i in range(2):  # สร้าง Monster1 ทีละตัว
+        spawn_delay = 500 
+        for i in range(2): 
             self.spawn_monster_delayed(Monster1, i * spawn_delay)
-
-        # ตั้งเวลาให้ Monster1 และ Monster2 เกิดหลัง 6 วิ
         self.root.after(7000, lambda: self.spawn_monster(Monster1))
         self.root.after(7000, lambda: self.spawn_monster(Monster2))
-
-        # ตั้งเวลาให้ Monster1, Monster2 เกิดหลัง 10 วิ
         self.root.after(10000, lambda: self.spawn_monster(Monster1))
         self.root.after(10000, lambda: self.spawn_monster(Monster2))
-
-        print("เริ่มตั้งค่าให้เกิดการสุ่มมอนสเตอร์หลังจาก 15 วิ")
         self.root.after(15000, self.random_spawn)
+
 
     def random_spawn(self):
-        """ สุ่มเกิดมอนสเตอร์ และจำนวนเพิ่มขึ้น 2 เท่าทุก 5 วินาที """
-
-        if self.spawn_multiplier == 0:
-            self.spawn_multiplier = 1
+        if not hasattr(self, 'wave'):
+            self.wave = 1
         else:
-            self.spawn_multiplier *= 2
-        self.spawn_multiplier = 1
-        count = int(self.spawn_multiplier) 
-        monster_types = [Monster1, Monster2, Monster3] 
+            self.wave += 1
+
+        print(f"Wave {self.wave} เริ่มแล้ว!")
+
+        count = random.randint(2 + self.wave, 4 + self.wave * 2)
+        monster_types = [Monster1, Monster2, Monster3]
+        if self.wave < 3:
+            weights = [0.6, 0.4, 0.0]
+        elif self.wave < 6:
+            weights = [0.4, 0.4, 0.2]
+        else:
+            weights = [0.2, 0.3, 0.5]
 
         for _ in range(count):
-            random_monster = random.choice(monster_types)
-            self.spawn_monster(random_monster)
-        self.root.after(15000, self.random_spawn)
+            monster_class = random.choices(monster_types, weights)[0]
+            if hasattr(monster_class, 'speed'):
+                monster_class.speed += self.wave * 0.1
+            self.spawn_monster(monster_class)
+
+        min_delay = max(2000, 8000 - self.wave * 500)
+        max_delay = max(4000, 12000 - self.wave * 500)
+        next_delay = random.randint(min_delay, max_delay)
+        self.root.after(next_delay, self.random_spawn)
+
+        if self.wave >= 20:
+            print("WIN")
+            self.game_over(win=True)
+            return
+
+        if hasattr(self, 'base_hp') and self.base_hp <= 0:
+            print("Game Over! ฐานถูกทำลาย")
+            self.game_over(win=False)
+            return
+
+    def game_over(self, win=False):
+        if win:
+            print("WIN")
+        else:
+            print("LOSS")
+        self.root.quit()
 
 
     def create_tower_panel(self):
@@ -170,11 +188,10 @@ class Game:
         self.root.after(500, self.run_tower)
 
 
-    def check_alive(self):
-        print(f"long long {Tower.shoot}")
+    # def check_alive(self):
+    #     print(f"long long {Tower.shoot}")
 
     
-     
     def game_over(self):
         play_time = time.time() - self.start_time
         minutes = int(play_time // 60)
@@ -185,9 +202,8 @@ class Game:
         msg = f"You Lost!\nScore: {self.score}\nTime: {minutes}m {seconds}s"
 
         import tkinter.messagebox as msgbox
-        msgbox.showinfo("Game Over กากมาก", msg)
+        msgbox.showinfo("Game Over", msg)
 
-        # ปิดเกม (หรือจะให้ restart ก็ได้)
         self.root.destroy()
 
     

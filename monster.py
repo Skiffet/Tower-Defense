@@ -17,8 +17,6 @@ class Monster:
 
         self.image = Image.open(image_path).resize((self.block_size, self.block_size))
         self.image_tk = ImageTk.PhotoImage(self.image)
-
-        # self.monster_obj = self.canvas.create_image(self.x * self.block_size, self.y * self.block_size, image=self.image_tk, anchor=tk.NW)
         self.monster_obj = self.canvas.create_image(self.x * self.block_size, self.y * self.block_size, image=self.image_tk, anchor=tk.NW)
         self.canvas.addtag_withtag('monster', self.monster_obj)
 
@@ -32,32 +30,24 @@ class Monster:
             
             dx = (target_x - self.x) * self.block_size
             dy = (target_y - self.y) * self.block_size
-
-            # อัปเดตตำแหน่ง
             self.canvas.move(self.monster_obj, dx, dy)
-
-            # อัปเดตค่าพิกัดใหม่
             self.x, self.y = target_x, target_y
             self.current_step += 1
-
-            # เคลื่อนที่ต่อไปหลังจากเวลาที่กำหนด
             self.canvas.after(self.speed, self.move)
 
     def calculate(self):
-        # self.amount += self.amount 
-        # self.score += self.score
         return self.amount, self.score
 
 
 class Monster1(Monster): 
     def __init__(self, canvas, path_list, block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/Monster1.png", speed=300, block_size=block_size, hp=50, amount=100, score = 10)
+        super().__init__(canvas, path_list, "./mosterImage/Monster1.png", speed=300, block_size=block_size, hp=30, amount=40, score = 10)
 
 
 class Monster2(Monster):
     def __init__(self, canvas, path_list, block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/Monster2.png", speed=200, block_size=block_size, hp=150, amount = 150, score = 15)
+        super().__init__(canvas, path_list, "./mosterImage/Monster2.png", speed=500, block_size=block_size, hp=70, amount = 40, score = 20)
 
 class Monster3(Monster):
     def __init__(self, canvas, path_list,block_size=20):
-        super().__init__(canvas, path_list, "./mosterImage/MonsterBig.png", speed=200, block_size=block_size, hp=300, amount =      200, score = 20)
+        super().__init__(canvas, path_list, "./mosterImage/MonsterBig.png", speed=350, block_size=block_size, hp=150, amount = 100, score = 40)

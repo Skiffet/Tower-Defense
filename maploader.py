@@ -79,82 +79,14 @@ class MapLoader:
                 self.image_refs.append(img)
 
     def set_towerId(self, tower_id):
-        """ ✅ อัปเดต ID ของ Tower ที่เลือก """
         self.tower_lit = tower_id
 
-    # def on_click(self, event):
-    #     """ ✅ เมื่อคลิก ให้เปลี่ยน `self.grid` และวาง Tower ลงบน Canvas """
-    #     x = event.x // self.block_size
-    #     y = event.y // self.block_size
-
-    #     # print(event.x, event.y)
-
-    #     if self.tower_lit == 0:
-    #         print("Please select a Tower first!")
-    #         return
-
-    #     if self.grid[y][x] in [1, 2]:
-    #         print("Cannot place tower on path or water!")
-    #         return
-
-    #     if self.grid[y][x] in [10, 20, 30]:
-    #         print("Tower already placed here!")
-    #         return
-        
-    #     tower_data = next((data for data in self.game.towers.values() if data["id"] == self.tower_lit), None)
-    #     if self.game.money < tower_data["cost"]:
-    #         print("เงินไม่พอ! ไม่สามารถวาง Tower ได้")
-    #         return
-
-    #     self.game.money -= tower_data["cost"]
-    #     self.game.money_label.config(text=f"Money: ${self.game.money}")
-        
-        
-    #     img = ImageTk.PhotoImage(self.textures[self.tower_lit])
-    #     # super().__init__(radius, canvas, x, y, target, damage=damage, speed=speed)
-    #     tower = None
-
-
-    #     # for monter_type in self.tower_lit:
-    #     if self.tower_lit == 10:
-    #         tower = Tower1(
-    #             x=event.x,
-    #             y=event.y,
-    #             canvas=self.canvas
-    #         )
-
-    #     elif self.tower_lit == 20:
-    #         tower = Tower2(
-    #             x=event.x,
-    #             y=event.y,
-    #             canvas=self.canvas
-    #         )
-
-    #     elif self.tower_lit == 30:
-    #             tower = Tower3(
-    #             x=event.x,
-    #             y=event.y,
-    #             canvas=self.canvas
-    #         )
-
-
-
-    #     # if self.
-    #     self.towers.append({
-    #         "tower": tower,
-    #         "tower_img": img,
-    #     })
-
-
-
-    #     self.canvas.create_image(x * self.block_size, y * self.block_size, image=img, anchor=tk.NW)
 
     def on_click(self, event):
         x = event.x // self.block_size
         y = event.y // self.block_size
 
         if self.tower_lit == 0:
-            print("Please select a Tower first!")
             return
 
         if self.grid[y][x] in [1, 2]:

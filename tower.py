@@ -1,8 +1,8 @@
-# from tawer_defense import MapLoader
+
 import tkinter as tk
 import random
 import math
-# from maploader import MapLoader
+
 class Tower:
     def __init__(self, radius, x, y, canvas, damage, speed):
         self.canvas = canvas
@@ -50,13 +50,13 @@ class Tower:
 
 class Tower1(Tower):
     def __init__(self, x, y, canvas):
-        super().__init__(radius=50, x=x, y=y, canvas=canvas, damage=50, speed=30)
+        super().__init__(radius=50, x=x, y=y, canvas=canvas, damage=25, speed=30)
 
 class Tower2(Tower):
     def __init__(self, x, y, canvas):
-        super().__init__(radius=80, x=x, y=y, canvas=canvas, damage=30,  speed=15)
+        super().__init__(radius=80, x=x, y=y, canvas=canvas, damage=35,  speed=15)
 
     
 class Tower3(Tower):
     def __init__(self, x, y, canvas):
-        super().__init__(radius=100, x=x, y=y, canvas=canvas, damage=150, speed=7)
+        super().__init__(radius=100, x=x, y=y, canvas=canvas, damage=80, speed=7)
