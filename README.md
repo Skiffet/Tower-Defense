@@ -21,7 +21,7 @@ Requires Python >= 3.10
 
 ## UML Class Diagram
 
-![Untitled Diagram.jpg](/Compro ll/Project final/Untitled Diagram.jpg)
+![UML Diagram](Untitled Diagram.jpg)
 
 ## How to run the application
 
