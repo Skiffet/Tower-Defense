@@ -20,7 +20,7 @@ Requires Python >= 3.10
 - Map Selection: Players can choose from multiple maps to play, each offering unique layouts and challenges.
 
 ## UML Class Diagram
-![UML Diagram](/Users/thanuthamchonsongkram/Desktop/เเฟ้มงานปี3เทอม2/Compro ll/Project final/Untitled Diagram.jpg)
+![UML Diagram](Untitled Diagram.jpg)
 
 ## How to run the application
 
