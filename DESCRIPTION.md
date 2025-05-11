@@ -26,7 +26,7 @@ Players must defend their base by strategically placing towers to stop waves of 
 |------------|---------------------------------------|
 | Game       | Game loop, state management           |
 | Tower      | Tower logic, attack, upgrade          |
-| Monster    | Enemy movement, health, damage        |
+| Monster    | Enemy movement, health        |
 | MapLoader  | Load and manage map data              |
 | MainMenu   | Main menu and navigation              |
 | Analyze    | Data collection and visualization     |
