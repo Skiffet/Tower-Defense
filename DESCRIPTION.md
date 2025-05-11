@@ -60,14 +60,12 @@ These data are visualized in tables and graphs (line charts, bar charts, pie cha
 ## Limitations / Known Issues
 
 - No save/load feature in this version.
-- [Add any other known issues here.]
 
 ## Future Work / Improvements
 
 - Add multiplayer support.
 - Implement save/load functionality.
 - More tower and enemy types.
-- [Add any other planned improvements.]
 
 ## YouTube Presentation
 
