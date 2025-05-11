@@ -33,11 +33,16 @@ Players must defend their base by strategically placing towers to stop waves of 
 
 ## Game Metrics Table
 
-| Metric              | Description                                                                                         | How to Measure / Calculate                              | Variable / Field in Code                | Visualization / Output Type                |
-|---------------------|-----------------------------------------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|--------------------------------------------|
-| **Damage**          | Measures total offensive output from all towers.                                                    | Sum damage dealt during each game.                      | total_damage in the Game class          | Graph (Line Chart / Stacked Bar)           |
-| **Score**           | Overall measure of performance and game success.                                                    | Accumulate score through monster kills.                 | score in the Game class                 | Table (Average, Max, Percentile)           |
-| **Tower Type Usage**| Identify which towers are most used. Useful for game balance and player preference analysis.         | Count how many times each of Tower1, Tower2, Tower3 is placed | tower_count[10/20/30] in Game class    | Graph (Pie Chart)                          |
+| Metric                | Description                                                                 | How to Measure / Track                        | Variable in Code                        | Visualization / Output                |
+|-----------------------|-----------------------------------------------------------------------------|-----------------------------------------------|-----------------------------------------|---------------------------------------|
+| Damage                | Measures total offensive output from all towers.                            | Sum damage dealt during each game.            | total_damage in the Game class          | Graph (Line Chart / Stacked Bar)      |
+| Score                 | Overall measure of performance and game success.                            | Accumulate score through monster kills.       | score in the Game class                 | Table (Average, Max, Percentile)      |
+| Tower Type Usage      | Identify which towers are most used. Useful for game balance and player preference analysis. | Count how many times each of Tower1, Tower2, Tower3 is placed | tower_count[10/20/30] in Game class     | Graph (Pie Chart)                     |
+| Tower Upgrade Usage   | Track how often each tower is upgraded.                                     | Count upgrades for each tower type.           | upgrade_count[10/20/30] in Game class   | Table, Bar Chart                      |
+| Money Spent           | Total in-game currency spent by the player.                                 | Sum of all money spent on towers/upgrades.    | money_spent in the Game class           | Line Chart                            |
+| Enemies Killed        | Number of enemies defeated by the player.                                   | Count of all enemies killed.                  | enemies_killed in the Game class        | Table, Bar Chart                      |
+| Waves Survived        | Number of enemy waves survived before defeat.                               | Count of completed waves.                     | waves_survived in the Game class        | Table, Line Chart                     |
+| Play Time             | Total time spent in a game session.                                         | Timer from game start to end.                 | play_time in the Game class             | Table, Histogram                      |
 
 ## Data Component
 
