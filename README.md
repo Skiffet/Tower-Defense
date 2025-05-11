@@ -2,9 +2,9 @@
 
 This project is a strategic tower defense game where players must defend their base by strategically placing towers to stop waves of enemies. The game includes various tower types, enemy types, and mechanics to enhance the gameplay experience.
 
-## Game Concept
+## Project Screenshot
 
-Players must defend their base by strategically placing towers to stop waves of enemies. When players defeat monsters, they earn money, which can be used to place additional towers or upgrade existing ones. The game ends only when the monsters successfully reach the final destination, and the player's score along with the time taken to play the game will be displayed.
+![Gameplay Screenshot](screenshots/gameplay/menu.png)
 
 ## Python Version
 
@@ -18,9 +18,6 @@ Requires Python >= 3.10
 - Resource management mechanics for building and upgrading towers.
 - The game ends only when the enemies successfully reach the final destination.
 - Map Selection: Players can choose from multiple maps to play, each offering unique layouts and challenges.
-
-## UML Class Diagram
-![UML Diagram](Diagram.jpg)
 
 ## How to run the application
 

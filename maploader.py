@@ -12,8 +12,8 @@ class MapLoader:
         self.row_length = row_length
         self.grid = []
         self.path_list = []
-        self.tower_lit = 0  # ✅ เก็บ ID ของ Tower ที่เลือก
-        self.towers = []  # ✅ เก็บออบเจ็กต์ของ Tower ที่สร้าง
+        self.tower_lit = 0 
+        self.towers = []
 
 
         self.game = game

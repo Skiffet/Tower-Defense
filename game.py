@@ -41,7 +41,7 @@ class Game:
     def spawn_monster_delayed(self, monster_class, delay):
         self.root.after(delay, lambda: self.spawn_monster(monster_class))
 
-    def spawn_monster(self, monster_class):
+    def spawn_monster(self, monster_class): 
         monster = monster_class(self.map_loader.canvas, self.map_loader.path_list)
         self.monsters.append(monster)
         monster.move()

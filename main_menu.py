@@ -37,7 +37,6 @@ option_menu = ttk.OptionMenu(root, map_var, map_options[0], *map_options)
 option_menu.config(style="Custom.TMenubutton")
 canvas.create_window(400, 200, window=option_menu)
 
-# ปุ่ม Play
 def on_play_click(event=None):
     selected_map = map_var.get()
     root.destroy()
