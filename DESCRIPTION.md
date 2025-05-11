@@ -31,6 +31,14 @@ Players must defend their base by strategically placing towers to stop waves of 
 | MainMenu   | Main menu and navigation              |
 | Analyze    | Data collection and visualization     |
 
+## Game Metrics Table
+
+| Metric              | Description                                                                                         | How to Measure / Calculate                              | Variable / Field in Code                | Visualization / Output Type                |
+|---------------------|-----------------------------------------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|--------------------------------------------|
+| **Damage**          | Measures total offensive output from all towers.                                                    | Sum damage dealt during each game.                      | total_damage in the Game class          | Graph (Line Chart / Stacked Bar)           |
+| **Score**           | Overall measure of performance and game success.                                                    | Accumulate score through monster kills.                 | score in the Game class                 | Table (Average, Max, Percentile)           |
+| **Tower Type Usage**| Identify which towers are most used. Useful for game balance and player preference analysis.         | Count how many times each of Tower1, Tower2, Tower3 is placed | tower_count[10/20/30] in Game class    | Graph (Pie Chart)                          |
+
 ## Data Component
 
 The game collects and visualizes the following data:
@@ -60,14 +68,12 @@ These data are visualized in tables and graphs (line charts, bar charts, pie cha
 ## Limitations / Known Issues
 
 - No save/load feature in this version.
-- [Add any other known issues here.]
 
 ## Future Work / Improvements
 
 - Add multiplayer support.
 - Implement save/load functionality.
 - More tower and enemy types.
-- [Add any other planned improvements.]
 
 ## YouTube Presentation
 
